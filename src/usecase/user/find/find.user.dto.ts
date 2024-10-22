@@ -1,5 +1,6 @@
 export interface InputFindUserDto {
-	id: string;
+	id?: string;
+	email?: string;
 }
 export interface OutputFindUserDto {
 	id: string;
