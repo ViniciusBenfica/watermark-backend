@@ -1,6 +1,6 @@
-import User from '../entity/user.entity';
+import type User from "../entity/user.entity";
 
 export default interface UserRepositoryInterface {
-  create(entity: User): Promise<void>;
-  find(id: string): Promise<User>;
+	create(entity: User): Promise<void>;
+	find(entity: Partial<User>): Promise<User>;
 }
