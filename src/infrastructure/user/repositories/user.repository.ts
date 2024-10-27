@@ -10,7 +10,7 @@ export default class UserRepository implements UserRepositoryInterface {
 		this.prisma = new PrismaClient();
 	}
 
-	async create(entity: User): Promise<void> {
+	async create(entity: User) {
 		await this.prisma.user.create({
 			data: {
 				userId: entity.id,
@@ -21,17 +21,15 @@ export default class UserRepository implements UserRepositoryInterface {
 		});
 	}
 
-	async find(entity: Partial<User>): Promise<User> {
-		let user: PrismaUser;
+	async find(entity: Partial<User>) {
+		const user = await this.prisma.user.findFirst({
+			where: {
+				OR: [{ userId: entity.id }, { email: entity.email }],
+			},
+		});
 
-		try {
-			user = await this.prisma.user.findFirstOrThrow({
-				where: {
-					OR: [{ userId: entity.id }, { email: entity.email }],
-				},
-			});
-		} catch (error) {
-			throw new Error("User not found");
+		if (!user) {
+			return null;
 		}
 
 		return UserFactory.create(user.name, user.email, user.password);
