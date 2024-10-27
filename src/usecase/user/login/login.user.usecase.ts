@@ -5,23 +5,21 @@ import type AuthTokenInterface from "../../../infrastructure/user/auth/token.int
 import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { InputLoginUserDto, OutputLoginUserDto } from "./login.user.dto";
 
-export default class LoginUserUseCase
-	implements UseCaseInterface<InputLoginUserDto, OutputLoginUserDto>
-{
+export default class LoginUserUseCase implements UseCaseInterface<InputLoginUserDto, OutputLoginUserDto> {
 	constructor(
 		private userRepository: UserRepositoryInterface,
 		private authTokenUser: AuthTokenInterface<JwtPayload>,
 	) {}
 
-	async execute(input: InputLoginUserDto): Promise<OutputLoginUserDto> {
+	async execute(input: InputLoginUserDto) {
 		const user = await this.userRepository.find(input);
 
 		if (!user) {
-			throw new Error("User not found");
+			throw new Error("Usuário não encontrado");
 		}
 
 		if (!new UserOwnerCrypter().compare(input.password, user.password)) {
-			throw new Error("Wrong password");
+			throw new Error("Senha incorreta");
 		}
 
 		const token = this.authTokenUser.createToken(user.name);
