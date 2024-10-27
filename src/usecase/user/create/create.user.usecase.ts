@@ -4,11 +4,9 @@ import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { InputCreateUserDto, OutputCreateUserDto } from "./create.user.dto";
 
 export default class CreateUserUseCase implements UseCaseInterface<InputCreateUserDto, OutputCreateUserDto> {
-	constructor(
-		private userRepository: UserRepositoryInterface,
-	) {}
+	constructor(private userRepository: UserRepositoryInterface) {}
 
-	async execute(input: InputCreateUserDto): Promise<OutputCreateUserDto> {
+	async execute(input: InputCreateUserDto) {
 		const user = UserFactory.create(input.name, input.email, input.password);
 
 		user.encryptPassword(input.password);
