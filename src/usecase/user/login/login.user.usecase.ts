@@ -22,7 +22,7 @@ export default class LoginUserUseCase implements UseCaseInterface<InputLoginUser
 			throw new Error("Senha incorreta");
 		}
 
-		const token = this.authTokenUser.createToken(user.name);
+		const token = this.authTokenUser.createToken({ username: user.name, userId: user.id });
 
 		return {
 			id: user.id,
