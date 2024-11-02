@@ -13,7 +13,7 @@ export default class UserRepository implements UserRepositoryInterface {
 	async create(entity: User) {
 		await this.prisma.user.create({
 			data: {
-				userId: entity.id,
+				id: entity.id,
 				name: entity.name,
 				email: entity.email,
 				password: entity.password,
@@ -24,7 +24,7 @@ export default class UserRepository implements UserRepositoryInterface {
 	async find(entity: Partial<User>) {
 		const user = await this.prisma.user.findFirst({
 			where: {
-				OR: [{ userId: entity.id }, { email: entity.email }],
+				OR: [{ id: entity.id }, { email: entity.email }],
 			},
 		});
 
@@ -32,6 +32,6 @@ export default class UserRepository implements UserRepositoryInterface {
 			return null;
 		}
 
-		return UserFactory.create(user.name, user.email, user.password);
+		return UserFactory.create(user.name, user.email, user.password, user.id);
 	}
 }
