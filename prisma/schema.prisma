@@ -8,30 +8,27 @@ datasource db {
 }
 
 model User {
-  id       Int       @default(autoincrement())
-  userId   String    @id @unique
+  id       String    @id @unique
   name     String
   email    String    @unique
   password String
   payment  Payment[]
   Plan     Plan?     @relation(fields: [planId], references: [id])
-  planId   Int?
+  planId   String?
 }
 
 model Payment {
-  id             Int      @default(autoincrement())
-  paymentId      String   @id @unique
+  id             String   @id @unique
   date           DateTime
   expirationDate DateTime
-  user           User     @relation(fields: [userId], references: [userId])
+  user           User     @relation(fields: [userId], references: [id])
   userId         String
   plan           Plan     @relation(fields: [planId], references: [id])
-  planId         Int
+  planId         String
 }
 
 model Plan {
-  id          Int       @id @default(autoincrement())
-  planId      String    @unique
+  id          String    @id @unique
   name        String
   description String
   price       Int

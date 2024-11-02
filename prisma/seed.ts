@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 async function main() {
 	await prisma.plan.create({
 		data: {
-			id: 1,
-			planId: uuid(),
+			id: uuid(),
 			name: "Basic",
 			description: "Plan description here",
 			price: 25,
@@ -16,8 +15,7 @@ async function main() {
 
 	await prisma.plan.create({
 		data: {
-			id: 2,
-			planId: uuid(),
+			id: uuid(),
 			name: "Standard",
 			description: "Plan description here",
 			price: 25,
@@ -27,8 +25,7 @@ async function main() {
 
 	await prisma.plan.create({
 		data: {
-			id: 3,
-			planId: uuid(),
+			id: uuid(),
 			name: "Premium",
 			description: "Plan description here",
 			price: 25,
