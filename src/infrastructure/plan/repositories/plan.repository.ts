@@ -1,37 +1,25 @@
-import { PrismaClient, type User as PrismaUser } from "@prisma/client";
-import type User from "../../../domain/user/entity/user.entity";
-import UserFactory from "../../../domain/user/factory/user.factory";
-import type UserRepositoryInterface from "../../../domain/user/repositories/user.repository";
+import { PrismaClient } from "@prisma/client";
+import PlanFactory from "../../../domain/plan/factory/plan.factory";
+import type PlanRepositoryInterface from "../../../domain/plan/repositories/plan.repository";
 
-export default class PlanRepository implements UserRepositoryInterface {
+export default class PlanRepository implements PlanRepositoryInterface {
 	prisma: PrismaClient;
 
 	constructor() {
 		this.prisma = new PrismaClient();
 	}
 
-	async create(entity: User) {
-		await this.prisma.user.create({
-			data: {
-				userId: entity.id,
-				name: entity.name,
-				email: entity.email,
-				password: entity.password,
-			},
-		});
-	}
-
-	async find(entity: Partial<User>) {
-		const user = await this.prisma.user.findFirst({
+	async find(id: string) {
+		const plan = await this.prisma.plan.findFirst({
 			where: {
-				OR: [{ userId: entity.id }, { email: entity.email }],
+				id,
 			},
 		});
 
-		if (!user) {
+		if (!plan) {
 			return null;
 		}
 
-		return UserFactory.create(user.name, user.email, user.password, user.userId);
+		return PlanFactory.create(plan.name, plan.description, plan.price, plan.duration, plan.id);
 	}
 }
