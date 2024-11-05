@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { env } from './env';
 import userRoute from './routes/user/user.route';
+import planRoute from './routes/plan/plan.route';
 
 interface IServer {
   app: express.Application;
@@ -28,6 +29,7 @@ class Server implements IServer {
 
   routes() {
     this.app.use(userRoute);
+    this.app.use(planRoute);
   }
 
   middlewares() {

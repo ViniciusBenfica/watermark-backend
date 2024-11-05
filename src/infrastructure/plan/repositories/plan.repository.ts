@@ -22,4 +22,10 @@ export default class PlanRepository implements PlanRepositoryInterface {
 
 		return PlanFactory.create(plan.name, plan.description, plan.price, plan.duration, plan.id);
 	}
+
+	async findAll() {
+		const plan = await this.prisma.plan.findMany();
+		
+		return plan.map((plan) => PlanFactory.create(plan.name, plan.description, plan.price, plan.duration, plan.id));
+	}
 }
