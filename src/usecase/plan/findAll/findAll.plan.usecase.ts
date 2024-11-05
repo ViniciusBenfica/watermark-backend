@@ -1,5 +1,5 @@
 import type PlanRepositoryInterface from "../../../domain/plan/repositories/plan.repository";
-import UseCaseInterface from "../../../shared/usecase.interface";
+import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { OutputFindAllPlanDto } from "./findAll.plan.dto";
 
 export default class FindAllPlanUseCase implements UseCaseInterface<void, OutputFindAllPlanDto[]> {

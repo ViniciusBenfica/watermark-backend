@@ -25,7 +25,6 @@ class PlanRoute {
 			}
 		}
 	}
-
 }
 
 export default new PlanRoute().router;
