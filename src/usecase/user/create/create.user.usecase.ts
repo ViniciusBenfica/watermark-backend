@@ -2,16 +2,22 @@ import type { JwtPayload } from "jsonwebtoken";
 import UserFactory from "../../../domain/user/factory/user.factory";
 import type UserRepositoryInterface from "../../../domain/user/repositories/user.repository";
 import type AuthTokenInterface from "../../../infrastructure/user/auth/token.interface";
-import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { InputCreateUserDto, OutputCreateUserDto } from "./create.user.dto";
+import FindUserUseCase from "../find/find.user.usecase";
 
-export default class CreateUserUseCase implements UseCaseInterface<InputCreateUserDto, OutputCreateUserDto> {
+export default class CreateUserUseCase {
 	constructor(
 		private userRepository: UserRepositoryInterface,
+		private findUserUseCase: FindUserUseCase,
 		private authTokenUser: AuthTokenInterface<JwtPayload>,
 	) {}
 
-	async execute(input: InputCreateUserDto) {
+	async execute(input: InputCreateUserDto): Promise<OutputCreateUserDto> {
+		
+		if(await this.findUserUseCase.execute({ email: input.email })) {
+			throw new Error("User already exists");
+		}
+
 		const user = UserFactory.create(input.name, input.email, input.password);
 
 		user.encryptPassword(input.password);

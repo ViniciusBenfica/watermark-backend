@@ -1,15 +1,14 @@
 import type UserRepositoryInterface from "../../../domain/user/repositories/user.repository";
-import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { InputFindUserDto, OutputFindUserDto } from "./find.user.dto";
 
-export default class FindUserUseCase implements UseCaseInterface<InputFindUserDto, OutputFindUserDto> {
+export default class FindUserUseCase {
 	constructor(private userRepository: UserRepositoryInterface) {}
 
-	async execute(input: InputFindUserDto) {
+	async execute(input: InputFindUserDto): Promise<OutputFindUserDto | null> {
 		const user = await this.userRepository.find(input);
 
 		if (!user) {
-			throw new Error("Usuário não encontrado");
+			return null;
 		}
 
 		return {
