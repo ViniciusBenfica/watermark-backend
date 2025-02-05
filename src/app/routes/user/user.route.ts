@@ -42,6 +42,7 @@ class UserRoute {
 				{ name: "images", maxCount: 10 },
 				{ name: "watermark", maxCount: 1 },
 			]),
+			jwtMiddleware,
 			this.applyWatermark.bind(this),
 		);
 	}
