@@ -7,6 +7,15 @@ export const jwtMiddleware = (
 	next: NextFunction,
 ): void => {
 	const authTokenService = new UserAuthToken();
+
+	const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+	const images = files?.images;
+
+	if(images?.length == 1) {
+		next();
+		return;
+	}
+
 	const authHeader = req.headers.authorization;
 	const token = authHeader?.split(" ")[1];
 
