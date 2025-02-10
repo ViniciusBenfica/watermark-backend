@@ -11,7 +11,8 @@
 				"noArrayIndexKey": "off"
 			},
 			"style": {
-				"noParameterAssign": "off"
+				"noParameterAssign": "off",
+				"noNonNullAssertion": "off"
 			},
 			"complexity": {
 				"noStaticOnlyClass": "off"
