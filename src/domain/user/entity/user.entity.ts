@@ -5,12 +5,14 @@ export default class User {
   private _name: string;
   private _password: string;
   private _email: string;
+  private _planId: string | null;
 
-  constructor(id: string, name: string, email: string, password: string) {
+  constructor(id: string, name: string, email: string, password: string, planId: string | null) {
     this._id = id;
     this._name = name;
     this._password = password;
     this._email = email;
+    this._planId = planId;
   }
 
   get id(): string {
@@ -27,6 +29,10 @@ export default class User {
 
   get email(): string {
     return this._email;
+  }
+
+  get planId(): string | null{
+    return this._planId;
   }
 
   encryptPassword(password: string) {

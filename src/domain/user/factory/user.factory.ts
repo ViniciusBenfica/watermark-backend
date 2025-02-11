@@ -6,8 +6,9 @@ export default class UserFactory {
     name: string,
     email: string,
     password: string,
+    planId?: string | null,
     id?: string,
   ): User {
-    return new User(id || uuid(), name, email, password);
+    return new User(id || uuid(), name, email, password, planId || null);
   }
 }
