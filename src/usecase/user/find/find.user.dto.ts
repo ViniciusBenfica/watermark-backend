@@ -6,4 +6,5 @@ export interface OutputFindUserDto {
 	id: string;
 	name: string;
 	email: string;
+	planId: string | null;
 }

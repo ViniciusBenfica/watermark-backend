@@ -1,17 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
 import UserAuthToken from "../../../infrastructure/user/auth/token.usecase";
 
-export const jwtMiddleware = (
-	req: Request,
-	res: Response,
-	next: NextFunction,
-): void => {
+export const jwtMiddleware = (req: Request, res: Response, next: NextFunction): void => {
 	const authTokenService = new UserAuthToken();
 
 	const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 	const images = files?.images;
 
-	if(images?.length == 1) {
+	if (images?.length === 1) {
 		next();
 		return;
 	}

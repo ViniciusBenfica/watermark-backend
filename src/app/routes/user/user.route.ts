@@ -1,16 +1,15 @@
-import { execFile } from "child_process";
-import fs from "fs";
-import sharp from "sharp";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import ApplyImagesUserUsecaseFactory from "@/usecase/user/applyImages/applyImages.user.usecase.factory";
+import archiver from "archiver";
 import { type Request, type Response, Router } from "express";
 import multer from "multer";
-import UserBuyProductUseCase from "../../../usecase/user/buy/buy.user.usecase";
 import BuyUserUsecaseFactory from "../../../usecase/user/buy/buy.user.usecase.factory";
 import CreateUserUsecaseFactory from "../../../usecase/user/create/create.user.usecase.factory";
 import FindUserUsecaseFactory from "../../../usecase/user/find/find.user.usecase.factory";
 import LoginUserUsecaseFactory from "../../../usecase/user/login/login.user.usecase.factory";
 import { jwtMiddleware } from "./jwt.middleware";
-import archiver from "archiver";
+
 class UserRoute {
 	router: Router;
 	multer = multer({
@@ -60,74 +59,26 @@ class UserRoute {
 
 			const outputFolder = path.resolve(__dirname, "../../../../uploads/output");
 			const inputFolder = path.resolve(__dirname, "../../../../uploads/input");
-
 			fs.mkdirSync(outputFolder, { recursive: true });
 
-			await this.processImages(images, watermark.path, outputFolder);
+			const useCase = ApplyImagesUserUsecaseFactory.create();
 
-			await this.createZipStream(outputFolder, res);
-			
+			const userDto = {
+				watermarkPath: watermark.path,
+				images,
+				outputFolder,
+				userId: req?.body?.user?.data?.userId,
+			};
+
+			const applyImage = await useCase.execute(userDto);
+
+			if (applyImage) {
+				await this.createZipStream(outputFolder, res);
+			}
+
 			this.cleanupFiles([outputFolder, inputFolder]);
-
 		} catch (error) {
-			res.status(500).send({ message: "Internal server error" });
-		}
-	}
-
-	private async processImages(
-		images: Express.Multer.File[],
-		watermarkPath: string,
-		outputFolder: string
-	) {
-		for (const image of images) {
-			const outputImagePath = path.join(outputFolder, path.basename(image.path));
-
-		const imageMetadata = await sharp(image.path).metadata();
-		const { width: imageWidth, height: imageHeight } = imageMetadata;
-
-		const watermarkWidth = Math.floor(imageWidth! / 5);
-		const watermarkHeight = Math.floor(imageHeight! / 5);
-
-		const resizedWatermark = await sharp(watermarkPath)
-			.resize(watermarkWidth, watermarkHeight, { fit: 'inside' })
-			.toFormat('png')
-			.composite([
-				{
-					input: Buffer.from([0,0,0,128]),
-					raw: {
-						width: 1,
-						height: 1,
-						channels: 4,
-					},
-					tile: true,
-					blend: 'dest-in',
-				}
-			])
-			.toBuffer();
-
-		const positions = [
-			{ left: 0, top: 0 },
-			{ left: imageWidth! / 2 - watermarkWidth / 2, top: 0 },
-			{ left: imageWidth! - watermarkWidth, top: 0 },
-
-			{ left: 0, top: imageHeight! / 2 - watermarkHeight / 2 },
-			{ left: imageWidth! / 2 - watermarkWidth / 2, top: imageHeight! / 2 - watermarkHeight / 2 },
-			{ left: imageWidth! - watermarkWidth, top: imageHeight! / 2 - watermarkHeight / 2 },
-
-			{ left: 0, top: imageHeight! - watermarkHeight },
-			{ left: imageWidth! / 2 - watermarkWidth / 2, top: imageHeight! - watermarkHeight },
-			{ left: imageWidth! - watermarkWidth, top: imageHeight! - watermarkHeight }
-		];
-
-		const compositeArray = positions.map(pos => ({
-			input: resizedWatermark,
-			left: Math.floor(pos.left),
-			top: Math.floor(pos.top),
-		}));
-
-		await sharp(image.path)
-			.composite(compositeArray)
-			.toFile(outputImagePath);
+			res.status(500).send({ message: error });
 		}
 	}
 
@@ -138,18 +89,24 @@ class UserRoute {
 		const archive = archiver("zip", { zlib: { level: 9 } });
 		archive.pipe(res);
 
-		fs.readdirSync(outputFolder).forEach((file) => {
+		const files = fs.readdirSync(outputFolder);
+
+		for (const file of files) {
 			const filePath = path.join(outputFolder, file);
 			if (fs.statSync(filePath).isFile()) {
 				archive.file(filePath, { name: file });
 			}
-		});
+		}
 
 		await archive.finalize();
 	}
 
 	private cleanupFiles(folders: string[]) {
-		folders.forEach((folder) => fs.existsSync(folder) && fs.rmSync(folder, { recursive: true, force: true }));
+		for (const folder of folders) {
+			if (fs.existsSync(folder)) {
+				fs.rmSync(folder, { recursive: true, force: true });
+			}
+		}
 	}
 
 	async createUser(req: Request, res: Response) {

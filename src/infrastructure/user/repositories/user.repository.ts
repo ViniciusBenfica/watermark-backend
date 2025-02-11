@@ -21,17 +21,19 @@ export default class UserRepository implements UserRepositoryInterface {
 		});
 	}
 
-	async find(entity: Partial<User>) {
+	async find(entity: Partial<User>): Promise<User | null> {
 		const user = await this.prisma.user.findFirst({
 			where: {
 				OR: [{ id: entity.id }, { email: entity.email }],
 			},
 		});
-
+		
 		if (!user) {
 			return null;
 		}
 
-		return UserFactory.create(user.name, user.email, user.password, user.id);
+		const userEntity = UserFactory.create(user.name, user.email, user.password, user.planId, user.id)
+
+		return userEntity;
 	}
 }
