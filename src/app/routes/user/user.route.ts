@@ -41,44 +41,48 @@ class UserRoute {
 				{ name: "images", maxCount: 10 },
 				{ name: "watermark", maxCount: 1 },
 			]),
-			jwtMiddleware,
+			// jwtMiddleware,
 			this.applyWatermark.bind(this),
 		);
 	}
 
 	async applyWatermark(req: Request, res: Response) {
+		const outputFolder = path.resolve(__dirname, "../../../../uploads/output");
+		const inputFolder = path.resolve(__dirname, "../../../../uploads/input");
+
 		try {
-			const files = req.files as { [key: string]: Express.Multer.File[] };
-			const watermark = files.watermark?.[0];
-			const images = files.images;
+			const files = req?.files as { [key: string]: Express.Multer.File[] };
+			const watermark = files?.watermark?.[0];
+			const images = files?.images;
 
 			if (!watermark || !images?.length) {
 				res.status(400).send({ message: "Files not uploaded correctly" });
 				return;
 			}
 
-			const outputFolder = path.resolve(__dirname, "../../../../uploads/output");
-			const inputFolder = path.resolve(__dirname, "../../../../uploads/input");
 			fs.mkdirSync(outputFolder, { recursive: true });
 
 			const useCase = ApplyImagesUserUsecaseFactory.create();
 
 			const userDto = {
-				watermarkPath: watermark.path,
+				watermarkPath: watermark?.path,
 				images,
 				outputFolder,
 				userId: req?.body?.user?.data?.userId,
 			};
 
-			const applyImage = await useCase.execute(userDto);
+			await useCase.execute(userDto);
 
-			if (applyImage) {
-				await this.createZipStream(outputFolder, res);
-			}
+			await this.createZipStream(outputFolder, res);
 
 			this.cleanupFiles([outputFolder, inputFolder]);
 		} catch (error) {
-			res.status(500).send({ message: error });
+			this.cleanupFiles([outputFolder, inputFolder]);
+			if (error instanceof Error) {
+				res.status(500).send({ message: error.message });
+			} else {
+				res.status(500).send({ message: "Internal server error" });
+			}
 		}
 	}
 

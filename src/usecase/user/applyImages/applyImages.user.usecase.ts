@@ -6,12 +6,12 @@ import type { InputApplyImagesDto } from "./applyImages.user.dto";
 export default class UserApplyImagesProductUseCase {
 	constructor(private findUser: FindUserUseCase) {}
 
-	async execute(input: InputApplyImagesDto): Promise<boolean> {
+	async execute(input: InputApplyImagesDto): Promise<void> {
 		if (input.images.length > 1) {
 			const user = await this.findUser.execute({ id: input?.userId });
 
 			if (!user?.planId) {
-				return false;
+				throw new Error("Nenhum plano encontrado para este usuário");
 			}
 		}
 
@@ -63,7 +63,5 @@ export default class UserApplyImagesProductUseCase {
 
 			await sharp(image.path).composite(compositeArray).toFile(outputImagePath);
 		}
-
-		return true;
 	}
 }
