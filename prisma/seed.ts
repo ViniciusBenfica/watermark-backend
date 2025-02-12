@@ -6,9 +6,9 @@ async function main() {
 	await prisma.plan.create({
 		data: {
 			id: uuid(),
-			name: "Basic",
+			name: "Mensal",
 			description: "Plan description here",
-			price: 25,
+			price: 250,
 			duration: 1,
 		},
 	});
@@ -16,9 +16,9 @@ async function main() {
 	await prisma.plan.create({
 		data: {
 			id: uuid(),
-			name: "Standard",
+			name: "Semestral",
 			description: "Plan description here",
-			price: 25,
+			price: 130,
 			duration: 1,
 		},
 	});
@@ -26,9 +26,9 @@ async function main() {
 	await prisma.plan.create({
 		data: {
 			id: uuid(),
-			name: "Premium",
+			name: "Anual",
 			description: "Plan description here",
-			price: 25,
+			price: 230,
 			duration: 1,
 		},
 	});
