@@ -1,35 +1,35 @@
 export default class Payment {
-  private _id: string;
-  private _date: string;
-  private _expirationDate: string;
-  private _userId: string;
-  private _planId: string;
+	private _id: string;
+	private _buyDate: Date;
+	private _expirationDate: Date;
+	private _userId: string;
+	private _planId: string;
 
-  constructor(id: string, userId: string, planId: string, date: string, expirationDate: string) {
-    this._id = id;
-    this._date = date;
-    this._expirationDate = expirationDate;
-    this._userId = userId;
-    this._planId = planId;
-  }
+	constructor(id: string, userId: string, planId: string, buyDate: Date, expirationDate: Date) {
+		this._id = id;
+		this._buyDate = buyDate;
+		this._expirationDate = expirationDate;
+		this._userId = userId;
+		this._planId = planId;
+	}
 
-  get id(): string {
-    return this._id;
-  }
+	get id(): string {
+		return this._id;
+	}
 
-  get date(): string {
-    return this._date;
-  }
+	get buyDate(): Date {
+		return this._buyDate;
+	}
 
-  get expirationDate(): string {
-    return this._expirationDate;
-  }
+	get expirationDate(): Date {
+		return this._expirationDate;
+	}
 
-  get userId(): string {
-    return this._userId;
-  }
+	get userId(): string {
+		return this._userId;
+	}
 
-  get planId(): string {
-    return this._planId;
-  }
+	get planId(): string {
+		return this._planId;
+	}
 }
