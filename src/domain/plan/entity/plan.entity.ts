@@ -32,4 +32,10 @@ export default class Plan {
 	get duration(): number {
 		return this._duration;
 	}
+
+	calculateExpirationDate(buyDate: Date): Date {
+		const expirationDate = new Date(buyDate);
+		expirationDate.setMonth(expirationDate.getMonth() + this._duration);
+		return expirationDate;
+	}
 }
