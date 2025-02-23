@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import { env } from "./env";
+import paymentRoute from "./routes/payment/payment.route";
 import planRoute from "./routes/plan/plan.route";
 import userRoute from "./routes/user/user.route";
 
@@ -30,11 +31,18 @@ class Server implements IServer {
 	routes() {
 		this.app.use(userRoute);
 		this.app.use(planRoute);
+		this.app.use(paymentRoute);
 	}
 
 	middlewares() {
 		this.app.use(cors());
-		this.app.use(express.json());
+		this.app.use((req, res, next) => {
+			if (req.originalUrl === "/webhooks/stripe") {
+				express.raw({ type: "application/json" })(req, res, next);
+			} else {
+				express.json()(req, res, next);
+			}
+		});
 	}
 }
 
