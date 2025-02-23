@@ -1,10 +1,9 @@
 import type ProcessPaymentInterface from "../../../infrastructure/user/processPayment/processPayment.interface";
-import type UseCaseInterface from "../../../shared/usecase.interface";
 import type FindPlanUseCase from "../../plan/find/find.plan.usecase";
 import type FindUserUseCase from "../find/find.user.usecase";
 import type { InputCreatePaymentDto, OutputCreatePaymentDto } from "./buy.user.dto";
 
-export default class UserBuyProductUseCase implements UseCaseInterface<InputCreatePaymentDto, OutputCreatePaymentDto> {
+export default class UserBuyProductUseCase {
 	constructor(
 		private findUser: FindUserUseCase,
 		private findPlan: FindPlanUseCase,
@@ -18,6 +17,7 @@ export default class UserBuyProductUseCase implements UseCaseInterface<InputCrea
 
 		const paymentDto = {
 			productId: plan.id,
+			userId: input.userId,
 			productPrice: plan.price,
 			productName: plan.name,
 			currency: "brl",

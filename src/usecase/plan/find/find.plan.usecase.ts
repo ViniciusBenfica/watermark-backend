@@ -1,11 +1,10 @@
 import type PlanRepositoryInterface from "../../../domain/plan/repositories/plan.repository";
-import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { InputFindPlanDto, OutputFindPlanDto } from "./find.plan.dto";
 
-export default class FindPlanUseCase implements UseCaseInterface<InputFindPlanDto, OutputFindPlanDto> {
+export default class FindPlanUseCase {
 	constructor(private planRepository: PlanRepositoryInterface) {}
 
-	async execute(input: InputFindPlanDto) {
+	async execute(input: InputFindPlanDto): Promise<OutputFindPlanDto> {
 		const plan = await this.planRepository.find(input.id);
 
 		if (!plan) {
