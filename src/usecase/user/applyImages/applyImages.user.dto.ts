@@ -1,6 +1,7 @@
 export interface InputApplyImagesDto {
-	images: Express.Multer.File[],
-	watermarkPath: string,
-	outputFolder: string,
-	userId: string,
+	images: Express.Multer.File[];
+	watermarkPath: string;
+	outputFolder: string;
+	userId?: string;
+	transparency?: number;
 }

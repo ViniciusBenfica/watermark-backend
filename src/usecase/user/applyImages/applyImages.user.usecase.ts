@@ -15,6 +15,9 @@ export default class UserApplyImagesProductUseCase {
 			}
 		}
 
+		const transparency = input.transparency ?? 50;
+		const alpha = Math.floor((255 * (100 - transparency)) / 100);
+
 		for (const image of input.images) {
 			const outputImagePath = path.join(input.outputFolder, path.basename(image.path));
 
@@ -29,7 +32,7 @@ export default class UserApplyImagesProductUseCase {
 				.toFormat("png")
 				.composite([
 					{
-						input: Buffer.from([0, 0, 0, 128]),
+						input: Buffer.from([0, 0, 0, alpha]),
 						raw: {
 							width: 1,
 							height: 1,
