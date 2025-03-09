@@ -2,9 +2,9 @@ import { env } from "@/app/env";
 import PaymentFactory from "@/domain/payment/factory/payment.factory";
 import type PaymentRepositoryInterface from "@/domain/payment/repositories/payment.repository";
 import PlanFactory from "@/domain/plan/factory/plan.factory";
-import UserPlanFactory from "@/domain/userPlan/factory/userPlan.factory";
+import UserPlanFactory from "@/domain/subscription/factory/subscription.factory";
 import type FindPlanUseCase from "@/usecase/plan/find/find.plan.usecase";
-import type CreateUserPlanUseCase from "@/usecase/userPlan/create/create.userPlan.usecase";
+import type CreateSubscriptionUseCase from "@/usecase/subscription/create/subscription.userPlan.usecase";
 import Stripe from "stripe";
 import type { InputCreatePaymentDto } from "./create.payment.dto";
 
@@ -14,7 +14,7 @@ export default class CreatePaymentUseCase {
 	constructor(
 		private paymentRepository: PaymentRepositoryInterface,
 		private findPlanUseCase: FindPlanUseCase,
-		private createUserPlanUseCase: CreateUserPlanUseCase,
+		private createSubscriptionUseCase: CreateSubscriptionUseCase,
 	) {
 		this.stripe = new Stripe(env.STRIPE_SECRET_KEY);
 	}
@@ -68,7 +68,7 @@ export default class CreatePaymentUseCase {
 
 		this.paymentRepository.create(payment);
 
-		this.createUserPlanUseCase.execute({
+		this.createSubscriptionUseCase.execute({
 			userId,
 			planId,
 			buyDate,

@@ -1,11 +1,10 @@
 import type PlanRepositoryInterface from "../../../domain/plan/repositories/plan.repository";
-import type UseCaseInterface from "../../../shared/usecase.interface";
 import type { OutputFindAllPlanDto } from "./findAll.plan.dto";
 
-export default class FindAllPlanUseCase implements UseCaseInterface<void, OutputFindAllPlanDto[]> {
+export default class FindAllPlanUseCase {
 	constructor(private planRepository: PlanRepositoryInterface) {}
 
-	async execute() {
+	async execute(): Promise<OutputFindAllPlanDto[]> {
 		const plan = await this.planRepository.findAll();
 
 		return plan.map((plan) => {

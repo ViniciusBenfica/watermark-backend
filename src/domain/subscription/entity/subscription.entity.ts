@@ -1,4 +1,4 @@
-export default class UserPlan {
+export default class Subscription {
 	private _id: string;
 	private _userId: string;
 	private _planId: string;
