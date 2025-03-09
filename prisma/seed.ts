@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { v4 as uuid } from "uuid";
 
 async function main() {
 	await prisma.plan.create({

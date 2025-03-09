@@ -41,7 +41,7 @@ class UserRoute {
 				{ name: "images", maxCount: 10 },
 				{ name: "watermark", maxCount: 1 },
 			]),
-			// jwtMiddleware,
+			jwtMiddleware,
 			this.applyWatermark.bind(this),
 		);
 	}
@@ -150,9 +150,10 @@ class UserRoute {
 
 	async findUser(req: Request, res: Response) {
 		const useCase = FindUserUsecaseFactory.create();
-		const query = req.query as { email?: string; id?: string };
+		const param = req.params as { id: string };
+
 		try {
-			const output = await useCase.execute(query);
+			const output = await useCase.execute(param);
 			res.send(output);
 		} catch (error) {
 			if (error instanceof Error) {
