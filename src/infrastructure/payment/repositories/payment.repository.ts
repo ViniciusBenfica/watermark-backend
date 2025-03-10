@@ -21,7 +21,7 @@ export default class PaymentRepository implements PaymentRepositoryInterface {
 			return null;
 		}
 
-		return PaymentFactory.create(payment.userId, payment.planId, payment.buyDate, payment.expirationDate, payment.id);
+		return PaymentFactory.create(payment.userId, payment.planId, payment.buyDate, payment.status, payment.price, payment.id);
 	}
 
 	async create(entity: Payment): Promise<void> {
@@ -29,10 +29,23 @@ export default class PaymentRepository implements PaymentRepositoryInterface {
 			data: {
 				id: entity.id,
 				buyDate: entity.buyDate,
-				expirationDate: entity.expirationDate,
 				planId: entity.planId,
 				userId: entity.userId,
+				status: entity.status,
+				price: entity.price,
 			},
+		});
+	}
+
+	async findAllByUserId(userId: string): Promise<Payment[]> {
+		const payments = await this.prisma.payment.findMany({
+			where: {
+				userId,
+			},
+		});
+
+		return payments.map((payment) => {
+			return PaymentFactory.create(payment.userId, payment.planId, payment.buyDate, payment.status, payment.price, payment.id);
 		});
 	}
 }

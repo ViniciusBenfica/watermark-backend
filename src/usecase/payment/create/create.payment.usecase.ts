@@ -64,7 +64,7 @@ export default class CreatePaymentUseCase {
 
 		const expirationDate = plan.calculateExpirationDate(buyDate);
 
-		const payment = PaymentFactory.create(userId, planId, buyDate);
+		const payment = PaymentFactory.create(userId, planId, buyDate, "paid", plan.price);
 
 		this.paymentRepository.create(payment);
 

@@ -35,7 +35,7 @@ export default class UserRepository implements UserRepositoryInterface {
 			return null;
 		}
 
-		const userEntity = UserFactory.create(user.name, user.email, user.password, user.subscription[0]?.planId, user.id);
+		const userEntity = UserFactory.create(user.name, user.email, user.password, user.subscription?.planId, user.id);
 
 		return userEntity;
 	}
