@@ -13,6 +13,8 @@ export default class FindPaymentsByUserIdUseCase {
 				userId: payment.userId,
 				planId: payment.planId,
 				buyDate: payment.buyDate,
+				status: payment.status,
+				price: payment.price,
 			};
 		});
 	}

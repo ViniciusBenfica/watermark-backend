@@ -1,6 +1,8 @@
 export interface OutputFindPaymentsByUserIdDto {
 	id: string;
+	buyDate: Date;
 	userId: string;
 	planId: string;
-	buyDate: Date;
+	status: string;
+	price: number;
 }
