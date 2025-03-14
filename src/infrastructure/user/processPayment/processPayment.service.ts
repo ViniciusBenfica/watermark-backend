@@ -18,7 +18,6 @@ export default class ProcessPayment implements ProcessPaymentInterface {
 
 			const session = await this.stripe.checkout.sessions.create({
 				payment_method_types: ["card"],
-				ui_mode: "embedded",
 				mode: "subscription",
 				line_items: [
 					{
@@ -26,14 +25,15 @@ export default class ProcessPayment implements ProcessPaymentInterface {
 						quantity: paymentData.quantity,
 					},
 				],
-				return_url: env.FRONTEND_URL,
+				success_url: env.FRONTEND_URL,
+				cancel_url: env.FRONTEND_URL,
 				metadata: {
 					userId: paymentData.userId,
 					planId: paymentData.productId,
 				},
 			});
 
-			return { id: session.id, client_secret: session.client_secret };
+			return { url: session.url! };
 		} catch (error) {
 			throw new Error("Error when calling the payment route");
 		}

@@ -8,8 +8,7 @@ export interface InputProcessPaymentDto {
 }
 
 export interface OutputProcessPaymentDto {
-	id: string;
-	client_secret: string | null;
+	url: string;
 }
 
 export default interface ProcessPaymentInterface {

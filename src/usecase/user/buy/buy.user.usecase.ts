@@ -27,8 +27,7 @@ export default class UserBuyProductUseCase {
 		const payment = await this.processPayment.userPurchase(paymentDto);
 
 		return {
-			id: payment.id,
-			client_secret: payment.client_secret,
+			url: payment.url,
 		};
 	}
 }

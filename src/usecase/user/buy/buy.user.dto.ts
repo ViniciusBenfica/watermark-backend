@@ -4,6 +4,5 @@ export interface InputCreatePaymentDto {
 }
 
 export interface OutputCreatePaymentDto {
-	id: string;
-	client_secret: string | null;
+	url: string;
 }
