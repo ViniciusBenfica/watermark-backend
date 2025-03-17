@@ -3,8 +3,8 @@ import { env } from "../../../app/env";
 import type AuthTokenInterface from "./token.interface";
 
 export default class UserAuthToken implements AuthTokenInterface<JwtPayload> {
-	createToken(text: string): string {
-		return jwt.sign({ data: text }, env.JWT_TOKEN, {
+	createToken(data: JwtPayload): string {
+		return jwt.sign(data, env.JWT_TOKEN, {
 			expiresIn: env.TOKEN_EXPIRE_TIME,
 		});
 	}

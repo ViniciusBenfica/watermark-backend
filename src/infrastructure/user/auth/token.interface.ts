@@ -1,4 +1,4 @@
 export default interface AuthTokenInterface<T> {
-	createToken(data: string): string;
+	createToken(data: T): string;
 	verifyToken(token: string): T;
 }

@@ -8,7 +8,7 @@ export default class FindPlanUseCase {
 		const plan = await this.planRepository.find(input.id);
 
 		if (!plan) {
-			throw new Error("Plano não encontrado");
+			throw new Error("Plan not found");
 		}
 
 		return {

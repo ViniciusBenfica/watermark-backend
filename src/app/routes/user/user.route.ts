@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import ManageSubscription from "@/infrastructure/subscription/manageSubscription/manageSubscription.service";
 import ApplyImagesUserUsecaseFactory from "@/usecase/user/applyImages/applyImages.user.usecase.factory";
 import archiver from "archiver";
 import { type Request, type Response, Router } from "express";
@@ -34,6 +35,7 @@ class UserRoute {
 		this.router.post("/createUser", this.createUser);
 		this.router.post("/loginUser", this.loginUser);
 		this.router.get("/findUser/:id", this.findUser);
+		this.router.get("/stripeManager/:userId", this.stripeManager);
 		this.router.post("/buyProduct", this.buyPlan);
 		this.router.post(
 			"/applyWatermark",
@@ -169,6 +171,19 @@ class UserRoute {
 		try {
 			const output = await useCase.execute(userDto);
 			res.send(output);
+		} catch (error) {
+			if (error instanceof Error) {
+				res.status(404).send({ message: error.message });
+			}
+		}
+	}
+	async stripeManager(req: Request, res: Response) {
+		const { userId } = req.params;
+
+		try {
+			const useCase = new ManageSubscription();
+			const session = await useCase.manageSubscriptionStripe({ userId });
+			res.send(session);
 		} catch (error) {
 			if (error instanceof Error) {
 				res.status(404).send({ message: error.message });
