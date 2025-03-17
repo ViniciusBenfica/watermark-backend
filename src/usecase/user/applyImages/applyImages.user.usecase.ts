@@ -11,7 +11,7 @@ export default class UserApplyImagesProductUseCase {
 			const user = await this.findUser.execute({ id: input?.userId });
 
 			if (!user?.planId) {
-				throw new Error("Nenhum plano encontrado para este usuário");
+				throw new Error("No plan found for this user");
 			}
 		}
 

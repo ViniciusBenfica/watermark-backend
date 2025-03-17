@@ -25,6 +25,7 @@ export default class ProcessPayment implements ProcessPaymentInterface {
 						quantity: paymentData.quantity,
 					},
 				],
+				customer: paymentData.userId,
 				success_url: env.FRONTEND_URL,
 				cancel_url: env.FRONTEND_URL,
 				metadata: {
