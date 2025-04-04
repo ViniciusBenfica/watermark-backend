@@ -39,4 +39,28 @@ export default class UserRepository implements UserRepositoryInterface {
 
 		return userEntity;
 	}
+
+	async update(entity: User): Promise<User | null> {
+		const user = await this.prisma.user.update({
+			where: {
+				id: entity.id,
+			},
+			data: {
+				name: entity.name,
+				email: entity.email,
+				password: entity.password,
+			},
+			include: {
+				subscription: true,
+			},
+		});
+
+		if (!user) {
+			return null;
+		}
+
+		const userEntity = UserFactory.create(user.name, user.email, user.password, user.subscription?.planId, user.id);
+
+		return userEntity;
+	}
 }
