@@ -9,14 +9,14 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "UserPlan" (
+CREATE TABLE "Subscription" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "planId" TEXT NOT NULL,
     "buyDate" TIMESTAMP(3) NOT NULL,
     "expirationDate" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "UserPlan_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Subscription_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -25,6 +25,8 @@ CREATE TABLE "Payment" (
     "buyDate" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
     "planId" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "price" INTEGER NOT NULL,
 
     CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
 );
@@ -47,7 +49,10 @@ CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserPlan_id_key" ON "UserPlan"("id");
+CREATE UNIQUE INDEX "Subscription_id_key" ON "Subscription"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subscription_userId_key" ON "Subscription"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_id_key" ON "Payment"("id");
@@ -56,10 +61,10 @@ CREATE UNIQUE INDEX "Payment_id_key" ON "Payment"("id");
 CREATE UNIQUE INDEX "Plan_id_key" ON "Plan"("id");
 
 -- AddForeignKey
-ALTER TABLE "UserPlan" ADD CONSTRAINT "UserPlan_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserPlan" ADD CONSTRAINT "UserPlan_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Payment" ADD CONSTRAINT "Payment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
