@@ -1,7 +1,7 @@
 import type Payment from "@/domain/payment/entity/payment.entity";
 import PaymentFactory from "@/domain/payment/factory/payment.factory";
 import type PaymentRepositoryInterface from "@/domain/payment/repositories/payment.repository";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Payment as PrismaPayment } from "@prisma/client";
 
 export default class PaymentRepository implements PaymentRepositoryInterface {
 	prisma: PrismaClient;
@@ -44,7 +44,7 @@ export default class PaymentRepository implements PaymentRepositoryInterface {
 			},
 		});
 
-		return payments.map((payment: Payment) => {
+		return payments.map((payment: PrismaPayment) => {
 			return PaymentFactory.create(payment.userId, payment.planId, payment.buyDate, payment.status, payment.price, payment.id);
 		});
 	}

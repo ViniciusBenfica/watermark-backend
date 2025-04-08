@@ -1,7 +1,7 @@
 import type Subscription from "@/domain/subscription/entity/subscription.entity";
 import SubscriptionFactory from "@/domain/subscription/factory/subscription.factory";
 import type SubscriptionRepositoryInterface from "@/domain/subscription/repositories/subscription.repository.interface";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Subscription as PrismaSubscription } from "@prisma/client";
 
 export default class SubscriptionRepository implements SubscriptionRepositoryInterface {
 	prisma: PrismaClient;
@@ -25,7 +25,7 @@ export default class SubscriptionRepository implements SubscriptionRepositoryInt
 	async findAll(): Promise<Subscription[]> {
 		const subscriptions = await this.prisma.subscription.findMany();
 
-		return subscriptions.map((subscription: Subscription) => {
+		return subscriptions.map((subscription: PrismaSubscription) => {
 			return SubscriptionFactory.create(
 				subscription.userId,
 				subscription.planId,

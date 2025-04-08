@@ -1,5 +1,5 @@
 import type Plan from "@/domain/plan/entity/plan.entity";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Plan as PrismaPlan } from "@prisma/client";
 import PlanFactory from "../../../domain/plan/factory/plan.factory";
 import type PlanRepositoryInterface from "../../../domain/plan/repositories/plan.repository";
 
@@ -27,6 +27,6 @@ export default class PlanRepository implements PlanRepositoryInterface {
 	async findAll() {
 		const plan = await this.prisma.plan.findMany();
 
-		return plan.map((plan: Plan) => PlanFactory.create(plan.name, plan.description, plan.price, plan.duration, plan.id));
+		return plan.map((plan: PrismaPlan) => PlanFactory.create(plan.name, plan.description, plan.price, plan.duration, plan.id));
 	}
 }
