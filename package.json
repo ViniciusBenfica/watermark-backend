@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file .env src/app/index.ts",
-    "build": "npx prisma generate && tsc-alias",
+    "build": "npx prisma generate && tsc && tsc-alias",
     "start": "node dist/app/index.js",
     "seed": "tsx prisma/seed.ts"
   },
