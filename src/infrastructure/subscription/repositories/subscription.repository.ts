@@ -25,7 +25,7 @@ export default class SubscriptionRepository implements SubscriptionRepositoryInt
 	async findAll(): Promise<Subscription[]> {
 		const subscriptions = await this.prisma.subscription.findMany();
 
-		return subscriptions.map((subscription) => {
+		return subscriptions.map((subscription: Subscription) => {
 			return SubscriptionFactory.create(
 				subscription.userId,
 				subscription.planId,

@@ -44,7 +44,7 @@ export default class PaymentRepository implements PaymentRepositoryInterface {
 			},
 		});
 
-		return payments.map((payment) => {
+		return payments.map((payment: Payment) => {
 			return PaymentFactory.create(payment.userId, payment.planId, payment.buyDate, payment.status, payment.price, payment.id);
 		});
 	}
