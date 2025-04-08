@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file .env src/app/index.ts",
-    "build": "npx prisma generate && tsc",
+    "build": "npx prisma generate && tsc-alias",
     "start": "node dist/app/index.js",
     "seed": "tsx prisma/seed.ts"
   },
@@ -33,6 +33,7 @@
     "@types/express": "^5.0.0",
     "@types/multer": "^1.4.12",
     "@types/uuid": "^10.0.0",
+    "tsc-alias": "^1.8.9",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }
